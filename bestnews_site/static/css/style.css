@@ -1,0 +1,33 @@
+
+.grid-container {
+    margin: 2% 1% 0 1%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 2%;
+    grid-template-rows: repeat(4, 200px);
+    row-gap: 10px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+
+
+/* https://open.nytimes.com/css-grid-for-designers-f74a883b98f5 */

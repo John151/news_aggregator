@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{% load static %}
+<head>
+    <title>Local Perspective News</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"></link>
+</head>
+
+<body>
+    <div class="navbar navbar-expand-lg">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'home_page' %}">Local</a>
+            <a class="nav-item nav-link" href="#">National</a>
+            <a class="nav-item nav-link" href="#">World</a>
+            <a class="nav-item nav-link" href="#">Metro</a>
+            <a class="nav-item nav-link" href="#">Investigations</a>
+            <a class="nav-item nav-link" href="#">Business</a>
+            <a class="nav-item nav-link" href="#">Politics</a>
+            <a class="nav-item nav-link" href="#">Opinion</a>
+          </div>
+    </div>
+
+
+
+{% block content %}
+{% endblock %}
+
+</body>

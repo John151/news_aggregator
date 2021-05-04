@@ -1,0 +1,15 @@
+# python-related
+__pycache__
+*.pyc
+
+# ignore editor-specific files 
+.vscode
+.idea
+
+# ignore virtual enviroments 
+venv
+env
+
+# datbase
+
+db.sqlite3
