@@ -8,6 +8,15 @@
     row-gap: 10px;
 }
 
+.headline {
+    grid-column: 1 / span 2;
+}
+
+.story {
+    grid-row: 1 / span 2;
+}
+
+
 .navbar {
     display: flex;
     justify-content: center;

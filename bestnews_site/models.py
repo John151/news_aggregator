@@ -8,6 +8,7 @@ class Article(models.Model):
     publication = models.CharField(max_length=100, blank=False)
     city = models.CharField(max_length=30, blank=False)
     section = models.CharField(max_length=25, blank=False)
+    authors = models.CharField(max_length=50, blank=False)
     date = models.DateField(max_length=25, blank=False)
     body = models.TextField()
     image = models.ImageField(upload_to='article_images/', blank=True, null=True)

@@ -16,13 +16,37 @@ from source_info import *
 
 # from bestnews_site.models import news_articles
 
+def build_newspapers():
 
-for newspaper_source in list_news_obj:
-    print(newspaper_source.name)
-    local = newspaper_source.make_local_url()
-    newspaper_build = newspaper.build(local)
-    for article in newspaper_build.articles:
-        print(article.url)
+    for newspaper_source in list_news_obj:
+        print(newspaper_source.name)
+        local = newspaper_source.make_local_url()
+        newspaper_build = newspaper.build(local)
+        for article in newspaper_build.articles:
+            url_to_check = article.url
+            pubication = newspaper_source.name
+            url_check = filter_junk_results(url_to_check, publication, 'local')
+            if url_check:
+
+                article.download()
+                article.parse()
+
+                title = article.title
+                url = article.url
+                pubication = newspaper_source.name
+                city = newspaper_source.place
+                section = ''
+                authors = article.authors
+                date = ''
+                body = article.text
+                image = article.top_image
+
+
+def filter_junk_results(url, publication, section):
+    
+
+
+
     # for section in newspaper.paths:
     #     print(section)
     #     section_url = newspaper.make_path(section)
@@ -33,6 +57,7 @@ for newspaper_source in list_news_obj:
     # url = models.CharField(max_length=100, blank=False, unique=True)
     # publication = models.CharField(max_length=100, blank=False)
     # section = models.CharField(max_length=25, blank=False)
+    # authors = models.CharField(max_length=50, blank=False)
     # date = models.DateField(blank=False)
     # body = models.CharField(blank=False)
     # image = models.ImageField(upload_to='article_images/', blank=True, null=True)
