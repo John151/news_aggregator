@@ -1,7 +1,6 @@
 """Scrapes news sites, adds info to database"""
 import newspaper
 from newspaper import Article, fulltext
-from bs4 import BeautifulSoup
 import requests
 import os
 import django
@@ -9,12 +8,12 @@ import sys
 from source_info import *
 
 # # include this file location on the path 
-# sys.path.append(os.getcwd())   
+sys.path.append(os.getcwd())   
 # # explain where the settings are - these include where the db is 
-# os.environ.setd`efault('DJANGO_SETTINGS_MODULE', 'bestnews.settings')
-# django.setup() 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bestnews.settings')
+django.setup() 
 
-# from bestnews_site.models import news_articles
+from bestnews_site.models import Article
 
 def build_newspapers():
 
@@ -26,26 +25,38 @@ def build_newspapers():
         newspaper_build = newspaper.build(local)
         for article in newspaper_build.articles:
             url_to_check = article.url
-            print(f'Article url: {url_to_check}')
+            # print(f'Article url: {url_to_check}')
             publication = newspaper_source.name
             url_check = filter_junk_results(url_to_check, publication, 'local')
             if url_check:
+                try:
+                    article.download()
+                    article.parse()
 
-                article.download()
-                article.parse()
-
-                title = article.title
-                url = article.url
-                pubication = newspaper_source.name
-                city = newspaper_source.place
-                section = 'local'
-                authors = article.authors
-                date = article.publish_date
-                body = article.text
-                summary = article.summary
-                image = article.top_image
-                print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
-                print(f'body text 100 char: {body[100:]}\nsummary:{summary}\n\n')
+                    title = article.title
+                    url = article.url
+                    pubication = newspaper_source.name
+                    city = newspaper_source.place
+                    section = 'local'
+                    authors = article.authors[0]
+                    date = article.publish_date
+                    body = article.text
+                    summary = article.summary
+                    image = article.top_image
+                    try:
+                        a = Article(title=title, url=url, publication=publication,
+                        city=city, section=section, date=date, body=body,
+                        summary=summary, image=image)
+                        a.save()
+                        print(f'created new article: {a.title}')
+                    except django.db.utils.IntegrityError as e:
+                        print('Duplicate entry, not added.')
+                    except Exception as e:
+                        print(e)  
+                    # print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
+                    # print(f'body text 100 char: {body[100:]}\nsummary:{summary}\n\n')
+                except Exception as e:
+                    print(e)
 
 """This function checks the urls against known bad responses, returns boolean value"""
 def filter_junk_results(url, publication, section):
@@ -58,7 +69,7 @@ def filter_junk_results(url, publication, section):
         'Chicago Tribune': {'first': 12, 'last': 35, 'good_result': ['chicagotribune.com/midw', 'chicagotribune.com/news', 'chicagotribune.com/subu']},
         'Boston Herald': {'first': 12, 'last': 31, 'good_result': ['bostonherald.com/20']},
         'Detroit Free Press': {'first': 12, 'last': 37, 'good_result': ['reep.com/story/news/local', 'freep.com/story/news/loca']},
-        'St. Louis Post Dispatch': {'first': 12, 'last': 35, 'good_result': ['stltoday.com/news/local']},
+        'St. Louis Post Dispatch': {'first': 8, 'last': 35, 'good_result': ['stltoday.com/news/local']},
         'Milwaukee Journal Sentinal': {'first': 24, 'last': 40, 'good_result': ['story/news/local', 'story/communitie']}
     }
 
@@ -78,17 +89,17 @@ def filter_junk_results(url, publication, section):
         atlanta_last_characters = ['blog/']
 
         if exception_check == 'blog/': # atlanta journal constitution returns blog results
-            print('atlanta exception check occurred')
+            print('\natlanta exception check occurred')
             print(f'offending url: {url}')
             return False
 
     if publication == 'St. Louis Post Dispatch': # st louis post dispatch returns links to sections along with articles
         if len(url) <= 60:
-            print('st louis under 60 char')
+            print('\nst louis under 60 char')
             return False
         
         if url[25:] != 'https://www.stltoday.com/':
-            print(f'stl not correct beginning\nurl:{url}')
+            print(f'\nstl not correct beginning\nurl:{url}')
             return False
 
         stlouis_add_check = url[25:28]
@@ -100,6 +111,7 @@ def filter_junk_results(url, publication, section):
     if publication == 'Chicago Tribune':
         chicago_html_check = url[:4]
         if chicago_html_check != 'html':
+            print('chicago html check failed')
             return False
 
         chicago_obit_check = url[36:46]
@@ -110,11 +122,13 @@ def filter_junk_results(url, publication, section):
 
     # finally we can check results and possibly return true
     if truncated_url in li_good_result:
-        print('truncated url matched li_good_result item')
+        print('#$%&' * 30)
+        print('\n\ntruncated url matched li_good_result item')
         return True
         
+if __name__ == "__main__":
+    build_newspapers()
 
-build_newspapers()
     # url matches, and notes for sources that have issues
     # The Birmingham News
     # al.com/news/

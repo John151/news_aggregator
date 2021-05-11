@@ -11,4 +11,5 @@ class Article(models.Model):
     authors = models.CharField(max_length=50, blank=False)
     date = models.DateField(max_length=25, blank=False)
     body = models.TextField()
-    image = models.ImageField(upload_to='article_images/', blank=True, null=True)
+    summary = models.TextField()
+    image = models.CharField(max_length=100, blank=True, null=True)
