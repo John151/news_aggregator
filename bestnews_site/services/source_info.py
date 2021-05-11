@@ -19,12 +19,12 @@ list_news_obj.append(burmingham_news)
 # Arizona
 # Arkansas
 # California
-sf_chronicle = News_Source('San Francisco Chronicle', 'San Francisco, CA', 'https://www.sfchronicle.com/', 'local')
-sf_chronicle.add_path('business', 'business')
-sf_chronicle.add_path('politics', 'politics')
-sf_chronicle.add_path('investigations', 'investigations')
-sf_chronicle.add_path('opinion', 'opinion')
-list_news_obj.append(sf_chronicle)
+# sf_chronicle = News_Source('San Francisco Chronicle', 'San Francisco, CA', 'https://www.sfchronicle.com/', 'local')
+# sf_chronicle.add_path('business', 'business')
+# sf_chronicle.add_path('politics', 'politics')
+# sf_chronicle.add_path('investigations', 'investigations')
+# sf_chronicle.add_path('opinion', 'opinion')
+# list_news_obj.append(sf_chronicle)
 
 # Colorado
 denver_post = News_Source('The Denver Post', 'Denver, CO', 'https://www.denverpost.com/', 'news')
@@ -77,14 +77,14 @@ detroit_free.add_path('business', 'business')
 detroit_free.add_path('opinion', 'opinion')
 list_news_obj.append(detroit_free)
 
-# Minnesota 
-star_tribune = News_Source('Star Tribune', 'Minneapolis, MN', 'https://www.startribune.com/', 'local')
-star_tribune.add_path('business', 'business')
-star_tribune.add_path('opinion', 'opinion')
-star_tribune.add_path('national', 'nation')
-star_tribune.add_path('world', 'world')
-star_tribune.add_path('science', 'science')
-list_news_obj.append(star_tribune)
+# Minnesota - issue with results returned
+# star_tribune = News_Source('Star Tribune', 'Minneapolis, MN', 'https://www.startribune.com/', 'local')
+# star_tribune.add_path('business', 'business')
+# star_tribune.add_path('opinion', 'opinion')
+# star_tribune.add_path('national', 'nation')
+# star_tribune.add_path('world', 'world')
+# star_tribune.add_path('science', 'science')
+# list_news_obj.append(star_tribune)
 
 # Mississippi
 # Missouri
@@ -107,23 +107,23 @@ list_news_obj.append(stl_post)
 # Ohio
 # Oklahoma
 # Oregon
-# Pennsylvania
-philadelphia_inq = News_Source('The Philadelphia Inquirer', 'Philadelphia, PA', 'https://www.inquirer.com/', 'news/pennsylvania')
-philadelphia_inq.add_path('politics', 'politics')
-philadelphia_inq.add_path('national', 'news/nation-world')
-philadelphia_inq.add_path('economy', 'economy')
-philadelphia_inq.add_path('opinion', 'opinion')
-list_news_obj.append(philadelphia_inq)
+# Pennsylvania - inquirer returns nothing
+# philadelphia_inq = News_Source('The Philadelphia Inquirer', 'Philadelphia, PA', 'https://www.inquirer.com/', 'news/pennsylvania')
+# philadelphia_inq.add_path('politics', 'politics')
+# philadelphia_inq.add_path('national', 'news/nation-world')
+# philadelphia_inq.add_path('economy', 'economy')
+# philadelphia_inq.add_path('opinion', 'opinion')
+# list_news_obj.append(philadelphia_inq)
 
 # Rhode Island
 # South Carolina
 # South Dakota
 # Tennessee
 # Texas
-houston_chron = News_Source('The Houston Chronicle', 'Houston, TX', 'https://www.chron.com/', 'news/houston-texas')
-houston_chron.add_path('national', 'news/nation-world/nation')
-houston_chron.add_path('world', 'news/nation-world/world')
-list_news_obj.append(houston_chron)
+# houston_chron = News_Source('The Houston Chronicle', 'Houston, TX', 'https://www.chron.com/', 'news/houston-texas')
+# houston_chron.add_path('national', 'news/nation-world/nation')
+# houston_chron.add_path('world', 'news/nation-world/world')
+# list_news_obj.append(houston_chron)
 
 # Utah
 # Vermont
