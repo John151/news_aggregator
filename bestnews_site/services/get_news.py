@@ -5,7 +5,7 @@ import requests
 import os
 import django
 import sys
-from .source_info import *
+from source_info import *
 
 # # include this file location on the path 
 sys.path.append(os.getcwd())   
@@ -13,7 +13,7 @@ sys.path.append(os.getcwd())
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bestnews.settings')
 django.setup() 
 
-from ..models import Article
+from bestnews_site.models import Article
 
 def build_newspapers():
 
@@ -35,22 +35,22 @@ def build_newspapers():
 
                     title = article.title
                     url = article.url
-                    pubication = newspaper_source.name
+                    publication = newspaper_source.name
                     city = newspaper_source.place
                     section = 'local'
-                    authors = article.authors[0]
+                    authors = article.authors
                     date = article.publish_date
                     body = article.text
                     summary = article.summary
                     image = article.top_image
                     try:
                         a = Article(title=title, url=url, publication=publication,
-                        city=city, section=section, date=date, body=body,
+                        city=city, section=section, authors=authors, date=date, body=body,
                         summary=summary, image=image)
                         a.save()
                         print(f'created new article: {a.title}')
                     except django.db.utils.IntegrityError as e:
-                        print('Duplicate entry, not added.')
+                        print('Duplicate entry, not added.', e)
                     except Exception as e:
                         print(e)  
                     # print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
@@ -123,7 +123,7 @@ def filter_junk_results(url, publication, section):
     # finally we can check results and possibly return true
     if truncated_url in li_good_result:
         print('#$%&' * 30)
-        print('\n\ntruncated url matched li_good_result item')
+        print('\nSUCCESS\ntruncated url matched li_good_result item')
         return True
         
 if __name__ == "__main__":
