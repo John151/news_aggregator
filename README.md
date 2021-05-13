@@ -14,6 +14,6 @@ If you have any comments drop me a message!
 
 Full refrences will be included shortly, below are the main sources of info
 
-Link to very helpful css video I refrenced
-zFunx Web Developement Ideas - CSS for Newspaper Layout
+Link to very helpful css video I refrenced 
+zFunx Web Developement Ideas - CSS for Newspaper Layout <br />
 https://www.youtube.com/watch?v=hs36MriilM8
