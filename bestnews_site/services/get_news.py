@@ -5,7 +5,7 @@ import requests
 import os
 import django
 import sys
-from source_info import *
+from .source_info import *
 
 # # include this file location on the path 
 sys.path.append(os.getcwd())   
@@ -13,7 +13,7 @@ sys.path.append(os.getcwd())
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bestnews.settings')
 django.setup() 
 
-from bestnews_site.models import Article
+from ..models import Article
 
 def build_newspapers():
 

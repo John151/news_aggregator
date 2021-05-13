@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Section header -->
-<h1 class="section-header">LOCAL NEWS</h1>
+<h1 class="section-header">{{ section }} NEWS</h1>
 <!-- section quote -->
 <div>
     <blockquote class="blockquote">
@@ -14,35 +14,45 @@
     </blockquote>
 </div>
 
-<div class="wrapper">
-    <div class="box a">A</div>
-    <div class="box b">B</div>
-    <div class="box c">
-        <div class="box xx">cxx</div>
-        <div class="box y">cy</div>
-        <div class="box z">cz</div>
-    </div>
-    <div class="box d">
-        <div class="box w">dw</div>
-        <div class="box x">dx</div>
-        <div class="box y">dy</div>
-        <div class="box z">dz</div>
-    </div>
+{% for article in page_obj %}
+
+<div class="conatiner">
+    <h1>{{ article.headline }}</h1>
+    {% url 'from {{ article.publication }}' as article.url %}
+    <a href="{{ article.url }}">from {{ article.publication }}</a>
+    <a>{{ article.city }}</a>
+    {% if article.authors %}
+        <p class="authors">{{ article.author }}</p>
+    {% endif %}
+    <p>{{ article.body|truncatechars:1200 }}</p>
 </div>
 
-<div class="wrapper">
-    <div class="box a">A</div>
-    <div class="box b">B</div>
-    <div class="box c">
-       <div class="box x">cx</div>
-       <div class="box y">cy</div>
-       <div class="box zz">czz</div>
-    </div>
-    <div class="box d">
-        <div class="box x">dx</div>
-        <div class="box z">dz</div>
-    </div>
-</div>
+{% endfor %}
+
+
+<nav aria-label="Page navigation example">
+    {% if page_obj.has_other_pages %}
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if users.has_next %}
+            <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    {% endif %}
+    </ul>
+  </nav>
 
 
 {% endblock %}
