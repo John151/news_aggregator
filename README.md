@@ -11,4 +11,9 @@ This project used a library called newspaper3k which did a great job with a lot 
 
 If you have any comments drop me a message!
 
--John
+
+Full refrences will be included shortly, below are the main sources of info
+
+Link to very helpful css video I refrenced
+zFunx Web Developement Ideas - CSS for Newspaper Layout
+https://www.youtube.com/watch?v=hs36MriilM8
