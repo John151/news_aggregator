@@ -1,108 +1,30 @@
 body {
     margin: 40px;
+    background-color: rgb(230, 230, 230);
+    font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .section-header {
     align-items: center;
 }
 
-.wrapper {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(4, [col] auto);
-    grid-template-rows: repeat(2, [row] auto);
-    background-color: #fff;
-    color: #eee;
-    padding-bottom: 25px;
+.newspaper {
+    columns: 3;
+    background-color: rgb(226, 226, 226);
+    top: justify;
 }
 
-.box {
-    background-color: #ddd;
-    color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    font-size: 150%;
+.newspaper h2 {
+    column-span: all;
 }
 
-.box .box {
-    background-color: #ccc;
-    color: #444;
+.newspaper img {
+    width: 100%;
+    height: auto;
 }
 
-.a {
-    grid-column: col 1 / span 2;
-    grid-row: row;
+.publication {
+    font-weight: 600;
+    padding-right: 10px;
 }
-
-.b {
-    grid-column: col 3 / span 2;
-    grid-row: row;
-}
-
-.c {
-    grid-column: col / span 2;
-    grid-row: row 2;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr 1fr;
-}
-
-.d {
-    grid-column: col 3 / span 2;
-    grid-row: row 2;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr 1fr;
-}
-
-.e {
-    grid-column: col 1 / span 2;
-    grid-row: row;
-}
-
-.f {
-    grid-column: col 3 / span 2;
-    grid-row: row;
-}
-
-.w {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.x {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-.xx {
-    grid-column: 1 / 3;
-    grid-row: 1;
-}
-
-.y {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.zz {
-    grid-column: 2;
-    grid-row: 1 / 3;
-}
-.g {
-    grid-column: col / span 2;
-    grid-row: row 3;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr 1fr;
-}
-
-.h {
-    grid-column: col 3 / span 2;
-    grid-row: row 3;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr 1fr;
-}
-
 /* https://open.nytimes.com/css-grid-for-designers-f74a883b98f5 */

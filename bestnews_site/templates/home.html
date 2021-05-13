@@ -2,7 +2,7 @@
 
 {% block content %}
 <!-- Section header -->
-<h1 class="section-header">{{ section }} NEWS</h1>
+<h1 class="section-header">{{ section|upper }} NEWS</h1>
 <!-- section quote -->
 <div>
     <blockquote class="blockquote">
@@ -16,15 +16,18 @@
 
 {% for article in page_obj %}
 
-<div class="conatiner">
-    <h1>{{ article.headline }}</h1>
-    {% url 'from {{ article.publication }}' as article.url %}
-    <a href="{{ article.url }}">from {{ article.publication }}</a>
-    <a>{{ article.city }}</a>
+<div class="newspaper">
+    <h2>{{ article.title }}</h2>
+    <a class="publication">{{ article.publication }}</a>
+    <a class="city">{{ article.city }}</a>
     {% if article.authors %}
         <p class="authors">{{ article.author }}</p>
     {% endif %}
-    <p>{{ article.body|truncatechars:1200 }}</p>
+    <img src="{{ article.image }}">
+    {% url '{{ article.publication }}' as article.url %}
+    <div class="text">{{ article.body|truncatechars:1700 }} <a href="{{ article.url }}">read more at {{ article.publication }}</a>
+    </div>
+
 </div>
 
 {% endfor %}
