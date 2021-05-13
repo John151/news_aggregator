@@ -2,16 +2,11 @@
 path to local news url. additional paths saved in dictionary as needed"""
 
 class News_Source:
-    def __init__(self, name, place, homepage_url, local_news_path):
+    def __init__(self, name, place, homepage_url):
         self.name = name
         self.place = place
         self.homepage_url = homepage_url
-        self.local_news = local_news_path
         self.paths = {}
-
-    def make_local_url(self):
-        return str(self.homepage_url + self.local_news)
-        #do I need str()? -- check
 
     def add_path(self, subtopic, path):    
         self.paths[subtopic] = path
