@@ -17,3 +17,7 @@ Full refrences will be included shortly, below are the main sources of info
 Link to very helpful css video I refrenced 
 zFunx Web Developement Ideas - CSS for Newspaper Layout <br />
 https://www.youtube.com/watch?v=hs36MriilM8
+
+Extremely helpful css video
+Simple Parallax Scrolling Effect with CSS & Vanilla Javascript <br />
+https://www.youtube.com/watch?v=TawH-AqHTXc
