@@ -10,7 +10,8 @@ list_news_obj = []
 # Ideally there will be at least one for each state, for now 2 per region will suffice
 
 # Alabama
-burmingham_news = News_Source('The Birmingham News', 'Birmingham, AL', 'https://www.al.com/', 'news')
+burmingham_news = News_Source('The Birmingham News', 'Birmingham, AL', 'https://www.al.com/')
+burmingham_news.add_path('local', 'news')
 burmingham_news.add_path('politics', 'politics')
 burmingham_news.add_path('opinion', 'opinion')
 list_news_obj.append(burmingham_news)
@@ -27,7 +28,8 @@ list_news_obj.append(burmingham_news)
 # list_news_obj.append(sf_chronicle)
 
 # Colorado
-denver_post = News_Source('The Denver Post', 'Denver, CO', 'https://www.denverpost.com/', 'news')
+denver_post = News_Source('The Denver Post', 'Denver, CO', 'https://www.denverpost.com/')
+denver_post.add_path('local', 'news')
 denver_post.add_path('national', 'news/national')
 denver_post.add_path('world', 'news/world')
 denver_post.add_path('environment', 'news/environment')
@@ -38,7 +40,8 @@ list_news_obj.append(denver_post)
 # Delaware
 # Florida
 # Georgia
-atlanta_journal = News_Source('Atlanta Journal Constitution', 'Atlanta, GA', 'https://www.ajc.com/', 'news/atlanta-news')
+atlanta_journal = News_Source('Atlanta Journal Constitution', 'Atlanta, GA', 'https://www.ajc.com/')
+atlanta_journal.add_path('local', 'news/atlanta-news')
 atlanta_journal.add_path('national', 'news/nation-world')
 atlanta_journal.add_path('investigations', 'news/investigations')
 list_news_obj.append(atlanta_journal)
@@ -46,7 +49,8 @@ list_news_obj.append(atlanta_journal)
 # Hawaii
 # Idaho
 # Illinois
-chicago_tribune = News_Source('Chicago Tribune', 'Chicago, IL', 'https://www.chicagotribune.com/', 'midwest')
+chicago_tribune = News_Source('Chicago Tribune', 'Chicago, IL', 'https://www.chicagotribune.com/')
+chicago_tribune.add_path('local', 'midwest')
 chicago_tribune.add_path('environment', 'news/environment')
 chicago_tribune.add_path('investigations', 'investigations')
 chicago_tribune.add_path('politics', 'politics')
@@ -63,13 +67,15 @@ list_news_obj.append(chicago_tribune)
 # Maine
 # Maryland
 # Massachusetts
-boston_herald = News_Source('Boston Herald', 'Boston, MA','https://www.bostonherald.com/', 'news/massachusetts-news')
+boston_herald = News_Source('Boston Herald', 'Boston, MA','https://www.bostonherald.com/')
+boston_herald.add_path('local', 'news/massachusetts-news')
 boston_herald.add_path('national', 'news/national-news')
 boston_herald.add_path('world', 'news/world-news')
 list_news_obj.append(boston_herald)
 
 # Michigan
-detroit_free = News_Source('Detroit Free Press', 'Detroit, MI', 'https://www.freep.com/', 'news/michigan')
+detroit_free = News_Source('Detroit Free Press', 'Detroit, MI', 'https://www.freep.com/')
+detroit_free.add_path('local', 'news/michigan')
 detroit_free.add_path('metro', 'news/detroit')
 detroit_free.add_path('politics', 'news/politics')
 detroit_free.add_path('investigations', 'news/investigations')
@@ -88,7 +94,8 @@ list_news_obj.append(detroit_free)
 
 # Mississippi
 # Missouri
-stl_post = News_Source('St. Louis Post Dispatch', 'St. Louis, MO', 'https://www.stltoday.com/', 'news/local/metro')
+stl_post = News_Source('St. Louis Post Dispatch', 'St. Louis, MO', 'https://www.stltoday.com/')
+stl_post.add_path('local', 'news/local/metro')
 stl_post.add_path('politics', 'news/local/govt-and-politics')
 stl_post.add_path('metro', 'news/local/metro')
 stl_post.add_path('opinion', 'opinion')
@@ -131,7 +138,8 @@ list_news_obj.append(stl_post)
 # Washington
 # West Virginia
 # Wisconsin
-milwaukee_journal = News_Source('Milwaukee Journal Sentinal', 'Milwaukee, WI', 'https://www.jsonline.com/', 'news/state')
+milwaukee_journal = News_Source('Milwaukee Journal Sentinal', 'Milwaukee, WI', 'https://www.jsonline.com/')
+milwaukee_journal.add_path('local', 'news/state')
 milwaukee_journal.add_path('business', 'business')
 list_news_obj.append(milwaukee_journal)
 
