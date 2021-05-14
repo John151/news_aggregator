@@ -1,9 +1,9 @@
 """Scrapes news sites, adds info to database"""
 import newspaper
 from newspaper import Article, fulltext, news_pool
-import requests
 import os
 import django
+from django.utils.timezone import localdate
 import sys
 from source_info import *
 
@@ -16,115 +16,81 @@ django.setup()
 from bestnews_site.models import Article
 
 newspaper_sections = ['criminal_justice','business','education',
-                      'environment','investigations', 'metro','national',
+                      'environment','investigations', 'local' 'metro', 'national',
                       'opinion', 'politics', 'world']
 
 
-# def build_newspapers():
-
-    # def build_local():
-
-    #     for newspaper_source in list_news_obj:
-            # print('*' * 50)
-            # print(f'\nName: {newspaper_source.name}')
-            # local = newspaper_source.make_local_url()
-            # print(f'Local url {local}')
-            # newspaper_build = newspaper.build(local)
-            # for article in newspaper_build.articles:
-            #     url_to_check = article.url
-            #     # print(f'Article url: {url_to_check}')
-            #     publication = newspaper_source.name
-            #     url_check = filter_junk_results(url_to_check, publication, 'local')
-            #     if url_check:
-            #         try:
-            #             article.download()
-            #             article.parse()
-
-            #             title = article.title
-            #             url = article.url
-            #             publication = newspaper_source.name
-            #             city = newspaper_source.place
-            #             section = 'local'
-            #             authors = article.authors
-            #             date = article.publish_date
-            #             body = article.text
-            #             summary = article.summary
-            #             image = article.top_image
-            #             try:
-            #                 a = Article(title=title, url=url, publication=publication,
-            #                 city=city, section=section, authors=authors, date=date, body=body,
-            #                 summary=summary, image=image)
-            #                 a.save()
-            #                 print(f'created new article: {a.title}')
-            #             except django.db.utils.IntegrityError as e:
-            #                 print('Duplicate entry, not added.', e)
-            #             except Exception as e:
-            #                 print(e)  
-            #             # print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
-            #             # print(f'body text 100 char: {body[100:]}\nsummary:{summary}\n\n')
-            #         except Exception as e:
-            #             print(e)
+"""uses newspaper3k library to build newspaper objects
+   data like article url, title, is pulled from the objects and put into the database
+   this function also invokes a results and reassignment checker
+"""
 
 def build_section(section):
+
     for newspaper_source in list_news_obj:
-        print('*' * 50)
         print(f'\nName: {newspaper_source.name}')
+
         if section in newspaper_source.paths:
             newspaper_stack = []
-            print(f'{newspaper_source.name} has {section} section')
             section_url = newspaper_source.make_path(section)
-            print(f'{section} url {section_url}')
             newspaper_build = newspaper.build(section_url)
             newspaper_stack.append(newspaper_build)
             news_pool.set(newspaper_stack, threads_per_source=2) # (3*2) = 6 threads total
             news_pool.join()
+
             for downloaded_paper in newspaper_stack:
                 articles = downloaded_paper.articles
+
                 for article in articles:    
-                    print(article.url)
-                    print(article.title)
+                    # print(article.url)
+                    # print(article.title)
                     section = filter_junk_results(article.url, newspaper_source.name, section)
-            # for article in newspaper_build.articles:
-            #     url_to_check = article.url
-            #     print(f'Article url: {url_to_check}')
-                    #url_check = filter_junk_results(url_to_check, publication, section)
-                    #if section:
-                        # try:
-                        #     article.download()
-                        #     article.parse()
 
-                        #     title = article.title
-                        #     url = article.url
-                        #     publication = newspaper_source.name
-                        #     city = newspaper_source.place
-                        #     section = 'local'
-                        #     authors = article.authors
-                        #     date = article.publish_date
-                        #     body = article.text
-                        #     summary = article.summary
-                        #     image = article.top_image
-                        #     try:
-                        #         a = Article(title=title, url=url, publication=publication,
-                        #         city=city, section=section, authors=authors, date=date, body=body,
-                        #         summary=summary, image=image)
-                        #         a.save()
-                        #         print(f'created new article: {a.title}')
-                        #     except django.db.utils.IntegrityError as e:
-                        #         print('Duplicate entry, not added.', e)
-                        #     except Exception as e:
-                        #         print(e)  
-                            # print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
-                            # print(f'body text 100 char: {body[100:]}\nsummary:{summary}\n\n')
-                        # except Exception as e:
-                        #     print(e)
+                    if section:
+                        try:
+                            article.download()
+                            article.parse()
+
+                            title = article.title
+                            url = article.url
+                            publication = newspaper_source.name
+                            city = newspaper_source.place
+                            section = section
+                            if article.authors:
+                                authors = article.authors[0]
+                            else:
+                                authors = ''
+                            body = article.text
+                            summary = article.summary
+                            image = article.top_image
+                            try:
+                                a = Article(title=title, url=url, publication=publication,
+                                city=city, section=section, authors=authors, date=date, body=body,
+                                summary=summary, image=image)
+                                a.save()
+                                print(f'created new article: {a.title}')
+                            except django.db.utils.IntegrityError as e:
+                                print('Duplicate entry, not added.', e)
+                            except Exception as e:
+                                print(e)  
+                            print (f'Title: {title}, url: {url}, publication: {publication}, city: {city}\nsection: {section}, authors: {authors}')
+                        except Exception as e:
+                            print(e)
 
 
-"""This function checks the urls against known bad responses, returns boolean value"""
+"""This function checks the urls against known bad responses, 
+    it also makes sure the section is correct based off of its url
+    if it is a good result the section is reassigned and returned
+    otherwise return is False
+"""
 def filter_junk_results(url, publication, section):
 
     # general bad results
     # the responses from some publications are less straight forward and require more attention
     if publication == 'Atlanta Journal Constitution':
+        if len(url) <= 45:
+            return False
+
         exception_check = url[:5]
         atlanta_last_characters = ['blog/']
 
@@ -158,12 +124,13 @@ def filter_junk_results(url, publication, section):
              'opin': 'opinion', 'poli': 'politics'},
         'The Denver Post': {'first': 12, 'last': 29, 'denverpost.com/20': 'local'},
         'Atlanta Journal Constitution': {'first': 12, 'last': 38, 'ajc.com/news/atlanta-news/': 'local',
-           'ajc.com/news/investigation': 'investigations', 'ajc.com/news/nation-world/': 'national'},
+           'ajc.com/news/georgia-news/': 'local', 'ajc.com/news/investigation': 'investigations',
+            'ajc.com/news/atlanta-news/': 'metro', 'ajc.com/news/nation-world/': 'national'},
         'Chicago Tribune': {'first': 31, 'last': 35, 'midw': 'local', 'news': 'local', 'subu': 'local',
             'crim': 'criminal_justice', 'busi': 'business', 'envi': 'environment', 'inve': 'investigations',
             'nati': 'national', 'poli': 'politics'},
         'Boston Herald': {'first': 12, 'last': 31, 'bostonherald.com/20': 'local'},
-        'Detroit Free Press': {'first': 33, 'last': 38, 'local': 'local', 'money': 'business',
+        'Detroit Free Press': {'first': 28, 'last': 33, 'local': 'local', 'money': 'business',
          'inves': 'investigations', 'ws/in': 'investigations', 'opini': 'opinion', 'polit': 'politics'},
         'St. Louis Post Dispatch': {'first': 12, 'last': 35, 'stltoday.com/news/local': 'local',
             'stltoday.com/business/l': 'business', 'stltoday.com/opinion/ed': 'opinion',
@@ -171,8 +138,6 @@ def filter_junk_results(url, publication, section):
         'Milwaukee Journal Sentinal': {'first': 24, 'last': 40, 'alternate_last': 36, 'story/news/local': 'local', 'story/communitie': 'local',
             'story/money/': 'business'}
     }
-    # https://www.stltoday.com/news/local/metro/
-    # https://www.stltoday.com/news/local/govt-and-politics
     # TODO Detroid free press sometimes has different url pattern, make sure you're getting all relevant results
 
     # Here some edge cases are sorted out, we may need to adjust more parameters
@@ -192,28 +157,25 @@ def filter_junk_results(url, publication, section):
     if 'alternate_last' in good_results[publication]:
         alternate_last = good_results[publication]['alternate_last']
         alternate_truncated_url = url[first:alternate_last]
-
-    print(f'li_good_result {li_good_result}')
-
+            
+        if alternate_truncated_url in good_results[publication]:
+            print('  MATCH ON ALTERNATE')
+            section = good_results[publication][alternate_truncated_url]
+            return section
 
     # finally we can check results and possibly return true
-    if truncated_url in li_good_result:
+    if truncated_url in good_results[publication]:
         print('  MATCH  ')
         section = good_results[publication][truncated_url]
         print(section)
         return section
     
-    elif alternate_truncated_url in li_good_result:
-        print('  MATCH ON ALTERNATE')
-        section = good_results[publication][alternate_truncated_url]
-        return section
 
     else:
         print('  NOT A MATCH  ')
         return False
         
 if __name__ == "__main__":
-    # build_newspapers()
     for section in newspaper_sections:
         build_section(section)
 
