@@ -83,12 +83,12 @@ def build_section(section):
                 for article in articles:    
                     print(article.url)
                     print(article.title)
-                    url_check = filter_junk_results(article.url, newspaper_source.name, section)
+                    section = filter_junk_results(article.url, newspaper_source.name, section)
             # for article in newspaper_build.articles:
             #     url_to_check = article.url
             #     print(f'Article url: {url_to_check}')
                     #url_check = filter_junk_results(url_to_check, publication, section)
-                    #if url_check:
+                    #if section:
                         # try:
                         #     article.download()
                         #     article.parse()
@@ -129,98 +129,88 @@ def filter_junk_results(url, publication, section):
         atlanta_last_characters = ['blog/']
 
         if exception_check == 'blog/': # atlanta journal constitution returns blog results
-            print('\natlanta exception check occurred')
-            print(f'offending url: {url}')
             return False
 
     if publication == 'St. Louis Post Dispatch': # st louis post dispatch returns links to sections along with articles
         if len(url) <= 60:
-            print('\nst louis under 60 char')
             return False
         
         if url[25:] != 'https://www.stltoday.com/':
-            print(f'\nstl not correct beginning\nurl:{url}')
             return False
 
         stlouis_add_check = url[25:28]
-        print(f'st louis checks, add:\n{stlouis_add_check}')
         if stlouis_add_check == 'ads':
-            print(f'failed add check,\n{url}')
             return False
 
     if publication == 'Chicago Tribune':
         chicago_html_check = url[:4]
         if chicago_html_check != 'html':
-            print('chicago html check failed')
             return False
 
         chicago_obit_check = url[36:46]
         if chicago_obit_check == 'obituaries':
-            print(f'chicago obit')
             return False
 
     # good results includes publication name, first and last places for string slicing for comparison, and results we want
+    # url section matches key, value is section to be returned
     good_results = {
-        'The Birmingham News': {'first': 19, 'last': 23, 'local': ['news', 'life'],
-             'opinion': ['opin'], 'politics': ['poli']},
-        'The Denver Post': {'first': 12, 'last': 29, 'local': ['denverpost.com/20']},
-        'Atlanta Journal Constitution': {'first': 12, 'last': 25, 'local': ['ajc.com/news/'],
-           'investigations': ['ajc.com/news/investigation'], 'national': ['ajc.com/news/nation-world/'],},
-        'Chicago Tribune': {'first': 12, 'last': 35, 'local': ['chicagotribune.com/midw', 'chicagotribune.com/news', 'chicagotribune.com/subu'],
-            'criminal_justice': [], 'business': [], 'environment': [], 'investigations': [],
-            'national': ['chicagotribune.com/nati'], 'politics': []},
-        'Boston Herald': {'first': 12, 'last': 31, 'local': ['bostonherald.com/20'],
-            'criminal_justice': [], 'business': [], 'education': [], 'environment': [], 'investigations': [],
-            'national': [], 'opinion': [], 'politics': [], 'world': []},
-        'Detroit Free Press': {'first': 12, 'last': 37, 'local': ['reep.com/story/news/local', 'freep.com/story/news/loca'],
-            'criminal_justice': [], 'business': [], 'education': [], 'environment': [], 'investigations': [],
-            'national': [], 'opinion': [], 'politics': [], 'world': []},
-        'St. Louis Post Dispatch': {'first': 8, 'last': 35, 'local': ['stltoday.com/news/local'],
-            'criminal_justice': [], 'business': [], 'education': [], 'environment': [], 'investigations': [],
-            'national': [], 'opinion': [], 'politics': [], 'world': []},
-        'Milwaukee Journal Sentinal': {'first': 24, 'last': 40, 'local': ['story/news/local', 'story/communitie'],
-            'criminal_justice': [], 'business': ['story/money/'], 'education': [], 'environment': [], 'investigations': [],
-            'national': [], 'opinion': [], 'politics': [], 'world': []}
+        'The Birmingham News': {'first': 19, 'last': 23, 'news': 'local', 'life': 'local',
+             'opin': 'opinion', 'poli': 'politics'},
+        'The Denver Post': {'first': 12, 'last': 29, 'denverpost.com/20': 'local'},
+        'Atlanta Journal Constitution': {'first': 12, 'last': 38, 'ajc.com/news/atlanta-news/': 'local',
+           'ajc.com/news/investigation': 'investigations', 'ajc.com/news/nation-world/': 'national'},
+        'Chicago Tribune': {'first': 31, 'last': 35, 'midw': 'local', 'news': 'local', 'subu': 'local',
+            'crim': 'criminal_justice', 'busi': 'business', 'envi': 'environment', 'inve': 'investigations',
+            'nati': 'national', 'poli': 'politics'},
+        'Boston Herald': {'first': 12, 'last': 31, 'bostonherald.com/20': 'local'},
+        'Detroit Free Press': {'first': 33, 'last': 38, 'local': 'local', 'money': 'business',
+         'inves': 'investigations', 'ws/in': 'investigations', 'opini': 'opinion', 'polit': 'politics'},
+        'St. Louis Post Dispatch': {'first': 12, 'last': 35, 'stltoday.com/news/local': 'local',
+            'stltoday.com/business/l': 'business', 'stltoday.com/opinion/ed': 'opinion',
+             'stltoday.com/opinion/co': 'opinion'},
+        'Milwaukee Journal Sentinal': {'first': 24, 'last': 40, 'alternate_last': 36, 'story/news/local': 'local', 'story/communitie': 'local',
+            'story/money/': 'business'}
     }
-    # The Denver Post urls are very unhelpful for sorting by section
-    if publication == 'The Denver Post':
+    # https://www.stltoday.com/news/local/metro/
+    # https://www.stltoday.com/news/local/govt-and-politics
+    # TODO Detroid free press sometimes has different url pattern, make sure you're getting all relevant results
+
+    # Here some edge cases are sorted out, we may need to adjust more parameters
+    # The Denver Post urls are very unhelpful for sorting by section, so is Boston Herald aparently
+    if publication == 'The Denver Post' or publication == 'Boston Herald':
         section = 'local'
 
-    if section == 'opinion':
-
-    if section == 'politics':
-
-    if section == 'national':
-        good_results['Atlanta Journal Constitution']['last'] = 38
-    if section == 'world':
-    if section == 'environment':
-    if section == 'education':
-    if section == 'investigations':
-        good_results['Atlanta Journal Constitution']['last'] = 38
-
-    if section == 'criminal_justice':
     if section == 'business':
         good_results['Milwaukee Journal Sentinal']['last'] = 36
 
-    if section == 'metro':
+    first = good_results[publication]['first']
+    print(f'first {first}')
+    last = good_results[publication]['last']
+    print(f'last {last}')
+    truncated_url = url[first:last]
+    print(f'truncated url {truncated_url}')
+    if 'alternate_last' in good_results[publication]:
+        alternate_last = good_results[publication]['alternate_last']
+        alternate_truncated_url = url[first:alternate_last]
 
-    if section in good_results[publication]:
-
-        first = good_results[publication]['first']
-        print(f'first {first}')
-        last = good_results[publication]['last']
-        print(f'last {last}')
-        truncated_url = url[first:last]
-        print(f'truncated url {truncated_url}')
-        li_good_result = good_results[publication][section]
-        print(f'li_good_result {li_good_result}')
+    print(f'li_good_result {li_good_result}')
 
 
-        # finally we can check results and possibly return true
-        if truncated_url in li_good_result:
-            print('#$%&' * 30)
-            print('\nSUCCESS\ntruncated url matched li_good_result item')
-            return True
+    # finally we can check results and possibly return true
+    if truncated_url in li_good_result:
+        print('  MATCH  ')
+        section = good_results[publication][truncated_url]
+        print(section)
+        return section
+    
+    elif alternate_truncated_url in li_good_result:
+        print('  MATCH ON ALTERNATE')
+        section = good_results[publication][alternate_truncated_url]
+        return section
+
+    else:
+        print('  NOT A MATCH  ')
+        return False
         
 if __name__ == "__main__":
     # build_newspapers()
