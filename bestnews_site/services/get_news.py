@@ -27,8 +27,9 @@ newspaper_sections = ['criminal_justice','business','education',
 
 def build_section(section):
 
+    # some articles don't provide a date, we assume they were posted receintly and use the date the data was gathered
     for newspaper_source in list_news_obj:
-        print(f'\nName: {newspaper_source.name}')
+        # print(f'\nName: {newspaper_source.name}')
 
         if section in newspaper_source.paths:
             newspaper_stack = []
@@ -56,17 +57,19 @@ def build_section(section):
                             publication = newspaper_source.name
                             city = newspaper_source.place
                             section = section
+                            body = article.text
+                            image = article.top_image
+
                             if article.authors:
                                 authors = article.authors[0]
                             else:
                                 authors = ''
-                            body = article.text
-                            summary = article.summary
-                            image = article.top_image
+ 
+
                             try:
                                 a = Article(title=title, url=url, publication=publication,
-                                city=city, section=section, authors=authors, date=date, body=body,
-                                summary=summary, image=image)
+                                city=city, section=section, authors=authors, body=body,
+                                image=image)
                                 a.save()
                                 print(f'created new article: {a.title}')
                             except django.db.utils.IntegrityError as e:
@@ -141,17 +144,12 @@ def filter_junk_results(url, publication, section):
     # TODO Detroid free press sometimes has different url pattern, make sure you're getting all relevant results
 
     # Here some edge cases are sorted out, we may need to adjust more parameters
-    # The Denver Post urls are very unhelpful for sorting by section, so is Boston Herald aparently
-    if publication == 'The Denver Post' or publication == 'Boston Herald':
-        section = 'local'
 
     if section == 'business':
         good_results['Milwaukee Journal Sentinal']['last'] = 36
 
     first = good_results[publication]['first']
-    print(f'first {first}')
     last = good_results[publication]['last']
-    print(f'last {last}')
     truncated_url = url[first:last]
     print(f'truncated url {truncated_url}')
     if 'alternate_last' in good_results[publication]:
