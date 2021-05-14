@@ -10,7 +10,6 @@ class Article(models.Model):
     city = models.CharField(max_length=30, blank=False)
     section = models.CharField(max_length=25, blank=False)
     authors = models.CharField(max_length=50, blank=False)
-    date = models.DateField(default=datetime.datetime.now(), max_length=25, blank=False)
+    date = models.DateTimeField(auto_now_add=True, blank=False)
     body = models.TextField()
-    summary = models.TextField()
     image = models.CharField(max_length=100, blank=True, null=True)

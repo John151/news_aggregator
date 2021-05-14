@@ -1,17 +1,70 @@
 body {
-    margin: 40px;
+    /* margin: 40px; */
     background-color: rgb(230, 230, 230);
     font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+#title {
+    position: relative;
+    color: #fff;
+    font-size: 10em;
+    z-index: 1;
+}
+
+.navbar {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    height: 30%;
+    font-size: 3em;
+    z-index: 1000000;
+}
+
 .section-header {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
     align-items: center;
+}
+.section-header:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgb(230, 230, 230), transparent);
+    z-index: 10000;
+}
+.section-header:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(176, 194, 228);
+    z-index: 10000;
+    mix-blend-mode: color;
+}
+.section-header img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
 }
 
 .newspaper {
     columns: 3;
     background-color: rgb(226, 226, 226);
     top: justify;
+    padding: 10px;
+    margin: auto;
 }
 
 .newspaper h2 {
@@ -23,8 +76,27 @@ body {
     height: auto;
 }
 
+.newspaper .text {
+    margin: 40px;
+    padding: 15px;
+}
+
+.newspaper .text:first-of-type:first-letter {
+    font-size: 3em;
+    float: left;
+    line-height: 50%;
+    margin: 0.1em 0.1em 0.1em --0.05em;
+}
+
 .publication {
     font-weight: 600;
     padding-right: 10px;
+}
+
+.navigation {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
 }
 /* https://open.nytimes.com/css-grid-for-designers-f74a883b98f5 */
